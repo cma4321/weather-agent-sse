@@ -12,7 +12,7 @@ router = APIRouter(prefix="/agent", tags=["agent"])
 
 
 class ExecuteRequest(BaseModel):
-    message: str = Field(min_length=1)
+    message: str = Field(min_length=1, max_length=2000)
 
 
 @router.post("/execute")

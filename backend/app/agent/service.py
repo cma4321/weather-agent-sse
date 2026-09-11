@@ -30,7 +30,7 @@ class AgentService:
                 include_types=INCLUDE_TYPES,
             ):
                 yield event
-        except Exception as exc:  # noqa: BLE001 - surfaced to the client as a final frame
+        except Exception as exc:  # broad on purpose: surfaced to the client as a final frame
             logger.exception("agent stream failed")
             yield {"event": "error", "data": {"message": str(exc)}}
 

@@ -38,6 +38,7 @@ def test_empty_message_is_rejected():
     client, _ = make_client()
     assert client.post("/agent/execute", json={"message": ""}).status_code == 422
     assert client.post("/agent/execute", json={}).status_code == 422
+    assert client.post("/agent/execute", json={"message": "x" * 2001}).status_code == 422
 
 
 def test_cors_allows_frontend_origin():
@@ -54,6 +55,7 @@ def test_router_module_does_not_import_langgraph():
 
     import app.api.agent_router  # noqa: F401
 
-    source = open(app.api.agent_router.__file__, encoding="utf-8").read()
+    with open(app.api.agent_router.__file__, encoding="utf-8") as fh:
+        source = fh.read()
     assert "langgraph" not in source and "langchain" not in source
     assert "app.api.agent_router" in sys.modules

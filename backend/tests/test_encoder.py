@@ -43,3 +43,14 @@ async def test_to_sse_encodes_each_event():
 
     frames = [f async for f in to_sse(events())]
     assert frames == ['event: a\ndata: {"event": "a", "data": {}}\n\n', 'event: b\ndata: {"event": "b", "data": {}}\n\n']
+
+
+async def test_to_sse_turns_encoding_failure_into_error_frame():
+    async def events():
+        yield {"event": "a", "data": {}}
+        yield {"data": {}}  # no "event" key -> KeyError inside encode_frame
+
+    frames = [f async for f in to_sse(events())]
+    assert frames[0].startswith("event: a\n")
+    assert frames[1].startswith("event: error\ndata: ")
+    assert '"message": "\'event\'"' in frames[1]
