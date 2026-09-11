@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { dispatch } from "@/lib/events/dispatch";
 import { initialState, startTurn, type ChatState } from "@/lib/events/state";
-import { toStreamEvent } from "@/lib/events/types";
+import { errorMessageOf, toStreamEvent } from "@/lib/events/types";
 import { parseSse } from "@/lib/sse/parse";
 
 const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -47,8 +47,7 @@ export function useAgentStream(baseUrl: string = DEFAULT_BASE_URL) {
 
         for await (const frame of parseSse(response.body)) {
           if (frame.event === "error") {
-            const detail = frame.data as { message?: string };
-            throw new Error(detail.message ?? "stream error");
+            throw new Error(errorMessageOf(frame));
           }
           commit(dispatch(stateRef.current, toStreamEvent(frame)));
         }

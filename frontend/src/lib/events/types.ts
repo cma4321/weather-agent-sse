@@ -48,6 +48,13 @@ export function toStreamEvent(frame: SseFrame): StreamEvent {
   };
 }
 
+/** Message carried by the backend's transport-level `error` frame (the whole envelope is the frame data). */
+export function errorMessageOf(frame: SseFrame): string {
+  const envelope = frame.data as { data?: { message?: unknown } } | null;
+  const message = envelope?.data?.message;
+  return typeof message === "string" && message ? message : "stream error";
+}
+
 /** Message content can be a string or a list of content blocks; return plain text. */
 export function textOf(content: unknown): string {
   if (typeof content === "string") return content;

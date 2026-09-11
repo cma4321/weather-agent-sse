@@ -62,6 +62,20 @@ describe("handleChatModelEvent", () => {
     ]);
   });
 
+  it("end with both final text and tool_calls emits a text block followed by tool_call blocks", () => {
+    let s = handleChatModelEvent(base, ev("on_chat_model_start", {}));
+    s = handleChatModelEvent(
+      s,
+      ev("on_chat_model_end", {
+        output: { content: "Vou consultar.", tool_calls: [{ id: "c1", name: "get_weather", args: { city: "SP" } }] },
+      }),
+    );
+    expect(blocks(s)).toEqual([
+      { kind: "text", text: "Vou consultar." },
+      { kind: "tool_call", name: "get_weather", args: { city: "SP" } },
+    ]);
+  });
+
   it("reads list content blocks", () => {
     const s = handleChatModelEvent(base, ev("on_chat_model_end", { output: { content: [{ type: "text", text: "a" }, { type: "text", text: "b" }] } }));
     expect(blocks(s)).toEqual([{ kind: "text", text: "ab" }]);

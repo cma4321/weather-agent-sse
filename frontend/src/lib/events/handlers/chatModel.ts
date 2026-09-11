@@ -17,12 +17,12 @@ function appendToDraft(text: string) {
   };
 }
 
-/** Final blocks for a completed model pass: tool calls if any, else the final text. */
+/** Final blocks for a completed model pass: final text (if any) followed by tool calls (if any). */
 function finalBlocks(output: MessageDump | undefined): Block[] {
-  const calls = output?.tool_calls ?? [];
-  if (calls.length > 0) return calls.map((call) => ({ kind: "tool_call", name: call.name, args: call.args }));
   const text = textOf(output?.content);
-  return text ? [{ kind: "text", text }] : [];
+  const calls = output?.tool_calls ?? [];
+  const blocks: Block[] = text ? [{ kind: "text", text }] : [];
+  return [...blocks, ...calls.map((call): Block => ({ kind: "tool_call", name: call.name, args: call.args }))];
 }
 
 function replaceDraft(replacement: Block[]) {

@@ -19,6 +19,7 @@ export function MessageInput({ disabled, onSend }: Props) {
     <form onSubmit={submit} className="flex gap-2">
       <input
         className="flex-1 rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+        aria-label="Mensagem"
         placeholder="Qual o clima em São Paulo?"
         value={value}
         onChange={(e) => setValue(e.target.value)}

@@ -18,6 +18,7 @@ export function ToolBlock({ block }: Props) {
       <div className="flex items-center gap-2">
         <span className="font-semibold">tool result</span>
         <span>{block.name}</span>
+        {block.input !== undefined && <span className="text-sky-700">{JSON.stringify(block.input)}</span>}
         {block.running && <span className="animate-pulse text-sky-600">running…</span>}
       </div>
       {!block.running && <pre className="mt-1 overflow-x-auto whitespace-pre-wrap">{pretty(block.output)}</pre>}
