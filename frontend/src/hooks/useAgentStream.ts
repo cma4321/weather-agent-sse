@@ -10,6 +10,11 @@ import { parseSse } from "@/lib/sse/parse";
 
 const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+function newTurnId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 export function useAgentStream(baseUrl: string = DEFAULT_BASE_URL) {
   const [state, setState] = useState<ChatState>(initialState);
   // Mirror of `state` so dispatch runs outside React's updater (its throws must reach our catch).
@@ -29,7 +34,7 @@ export function useAgentStream(baseUrl: string = DEFAULT_BASE_URL) {
       const controller = new AbortController();
       abortRef.current = controller;
 
-      commit({ ...startTurn(stateRef.current, crypto.randomUUID(), message), status: "streaming", error: undefined });
+      commit({ ...startTurn(stateRef.current, newTurnId(), message), status: "streaming", error: undefined });
 
       try {
         const response = await fetch(`${baseUrl}/agent/execute`, {
