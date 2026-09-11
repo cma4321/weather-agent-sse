@@ -104,7 +104,10 @@ the whole StreamEvent (`event`, `name`, `run_id`, `tags`, `metadata`, `data`,
 | `on_tool_end` | `name`, `data.output` (ToolMessage; `content` is the stub JSON string) |
 
 The `error` frame is a transport envelope, not a StreamEvent, and is handled by
-the front before type dispatch.
+the front before type dispatch. Because the encoder serialises the whole envelope,
+the message is read from `frame.data.data.message` (`errorMessageOf`). `to_sse`
+itself also emits one `error` frame if encoding fails, so the stream never ends
+silently on a server-side failure.
 
 ### Error handling
 
@@ -154,9 +157,10 @@ Handlers (pure, applied to the last turn):
 
 - `on_chat_model_start` → push `draft("")`.
 - `on_chat_model_stream` → append `data.chunk.content` to the current draft.
-- `on_chat_model_end` → replace the current draft: if `data.output.tool_calls`
-  is non-empty, one `tool_call` block per call; otherwise one `text` block with
-  `data.output.content`.
+- `on_chat_model_end` → replace the current draft: one `text` block with
+  `data.output.content` when it is non-empty, followed by one `tool_call` block
+  per entry in `data.output.tool_calls`. A pass with both content and tool calls
+  keeps both, so a preamble is never lost.
 - `on_tool_start` → push `tool_result{ running: true }`.
 - `on_tool_end` → fill `output` on the last running `tool_result` with the same
   `name`, set `running: false`.
