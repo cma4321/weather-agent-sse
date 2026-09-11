@@ -16,9 +16,9 @@ export function MessageInput({ disabled, onSend }: Props) {
   }
 
   return (
-    <form onSubmit={submit} className="flex gap-2">
+    <form onSubmit={submit} className="flex items-center gap-3">
       <input
-        className="flex-1 rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+        className="min-w-0 flex-1 rounded-full border border-sky-200 bg-white px-5 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-300 disabled:opacity-50"
         aria-label="Mensagem"
         placeholder="Qual o clima em São Paulo?"
         value={value}
@@ -26,7 +26,11 @@ export function MessageInput({ disabled, onSend }: Props) {
         disabled={disabled}
         autoFocus
       />
-      <button type="submit" disabled={disabled} className="rounded-md bg-zinc-900 px-4 py-2 text-white disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900">
+      <button
+        type="submit"
+        disabled={disabled}
+        className="shrink-0 rounded-full bg-sky-500 px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-sky-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 disabled:opacity-50"
+      >
         Enviar
       </button>
     </form>

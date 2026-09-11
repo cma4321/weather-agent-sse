@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Praxis P1 - Weather agent",
-  description: "LangGraph agent streamed over SSE",
+  title: "Weather Agent",
+  description: "Agent de clima em LangGraph, transmitido por SSE",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -23,7 +23,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full bg-gradient-to-b from-sky-50 to-white text-slate-800">
+        {children}
+      </body>
     </html>
   );
 }
