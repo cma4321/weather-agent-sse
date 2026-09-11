@@ -18,8 +18,8 @@ Acceptance criteria AC-01..AC-09 from the challenge PDF are the source of truth.
 |---|---|
 | Repo layout | Monorepo: `backend/` (FastAPI, uv) + `frontend/` (Next.js). `.env` at repo root (AC-09). |
 | LangGraph | `langgraph` library in-process. Graph compiled once, `astream_events(..., version="v2", include_types=["chat_model", "tool"])`. No LangGraph Server. |
-| Python tooling | uv, Python 3.12, `pyproject.toml` + `uv.lock`. |
-| Front stack | Next.js 15 App Router, TypeScript, Tailwind 4, no UI library. |
+| Python tooling | uv, Python 3.11+ (3.11.9 installed locally), `pyproject.toml` + `uv.lock`. |
+| Front stack | Next.js 16 App Router, TypeScript, Tailwind 4, no UI library. |
 | Tests | pytest (backend) + vitest (frontend). |
 | Code language | English identifiers/comments/docstrings. README in pt-BR. |
 | Tool delay | `WEATHER_DELAY_SECONDS`, default 2, configurable via env. |
